@@ -1,0 +1,8 @@
+<html>
+  <head></head>
+  <body>
+    <p>Hello, ${userName}</p>
+    <p>New Property Added</p>
+    <p>You are added as a ${role} for transaction of property located in ${address}</p>
+  </body>
+</html>
