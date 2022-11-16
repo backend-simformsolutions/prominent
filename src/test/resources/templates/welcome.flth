@@ -1,0 +1,9 @@
+<html>
+  <head></head>
+  <body>
+    <p>Hello, ${userName}</p>
+    <p>Welcome To Prominent Title</p>
+    <p>You are invited to the platform as a ${role} for transaction of property located in ${address}</p>
+    <br/>
+  </body>
+</html>

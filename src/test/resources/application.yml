@@ -1,0 +1,47 @@
+spring:
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        order_by:
+          default_null_ordering: last
+    hibernate:
+      ddl-auto: update
+      show-sql: true
+    show-sql: true
+  datasource:
+#            url: jdbc:postgresql://localhost:5432/public
+#            username: postgres
+#            password: dipak009
+    url: jdbc:postgresql://simform-postgres.cuvcbhydknjf.us-west-1.rds.amazonaws.com:5432/prominent
+    username: root
+    password: toor.321
+  mail:
+    host: smtp.gmail.com
+    username: prominenttestuser490@gmail.com
+    password: Data@123
+    port: '587'
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+logging:
+  level:
+    com:
+      prominent:
+        title: debug
+
+MAX_FAILED_ATTEMPTS: 3
+LOCK_TIME_DURATION: '#{1000 * 60 * 60}'
+JWT_TOKEN_EXPIRATION: '#{1000 * 60 * 60 * 24 * 7}'
+PASSWORD_TOKEN_EXPIRATION: '#{1000 * 60 * 60 * 24}'
+MAGIC_LINK_TOKEN_EXPIRATION: '#{1000 * 60 * 60 * 24 * 60}'
+SECRET: 'thesecret'
