@@ -23,14 +23,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -113,9 +112,12 @@ public class UserServiceTest {
         role.setRoleCode("User");
         role.setCreateDate(LocalDateTime.now());
 
+        Set<UserRoles> userRolesSet = new HashSet<>();
         userRoles = new UserRoles();
         userRoles.setRole(role);
         userRoles.setUser(user);
+        userRolesSet.add(userRoles);
+        user.setUserRoles(userRolesSet);
         addressListDto = new ArrayList<>();
         addressListDto.add(new GeneralAddressDto("Add line1", "Prantij", "Gujarat", "383120", true));
 
@@ -156,5 +158,36 @@ public class UserServiceTest {
         });
 
         assertTrue(exception.getMessage().contains(userDetailsDto.getUserName().toLowerCase()));
+    }
+
+    @Test
+    void get_user_details_by_user_name_test() {
+        when(userRepository.findByUserName(any())).thenReturn(Optional.ofNullable(user));
+        when(entityConverter.listOfGeneralAddressToGeneralAddressDto(any())).thenReturn(addressListDto);
+        when(entityConverter.userToUserDetailsDto(any())).thenReturn(userDetailsDto);
+
+        UserDetailsDto fetchedUserDetailsDto = userService.getUserDetails("Dipak", null);
+        assertThat(fetchedUserDetailsDto).isNotNull();
+    }
+
+    @Test
+    void get_user_details_by_user_id_test() {
+        when(userRepository.findById(anyInt())).thenReturn(Optional.ofNullable(user));
+        when(entityConverter.listOfGeneralAddressToGeneralAddressDto(any())).thenReturn(addressListDto);
+        when(entityConverter.userToUserDetailsDto(any())).thenReturn(userDetailsDto);
+
+        UserDetailsDto fetchedUserDetailsDto = userService.getUserDetails(null, "1");
+        assertThat(fetchedUserDetailsDto).isNotNull();
+    }
+
+    @Test
+    void user_not_found_test() {
+        when(userRepository.findByUserName(any())).thenReturn(Optional.ofNullable(null));
+
+        Exception exception = assertThrows(UserNotFoundException.class, () -> {
+            userService.getUserDetails("Dipak", null);
+        });
+
+        assertTrue(exception.getMessage().contains("Dipak"));
     }
 }
