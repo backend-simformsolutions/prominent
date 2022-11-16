@@ -89,11 +89,7 @@ class UserServiceTest {
         paymentInformation.setBankAccountNumber("34214687439274932");
         paymentInformation.setRecipientName("Test2");
         organization.setPaymentInformation(paymentInformation);
-
         GeneralAddress generalAddress = new GeneralAddress();
-        generalAddress.setAddress("Add line1");
-        generalAddress.setAddressId(1);
-        generalAddress.setState("Guj");
         generalAddress.setDefault(true);
         organization.addAddressInOrganization(generalAddress);
 
@@ -110,7 +106,11 @@ class UserServiceTest {
 
         organization.setUserList(userList);
         List<GeneralAddress> addressList = new ArrayList<>();
-        addressList.add(generalAddress);
+        GeneralAddress generalAddressone = new GeneralAddress();
+        generalAddressone.setAddress("Add line1");
+        generalAddressone.setAddressId(1);
+        generalAddressone.setState("Guj");
+        addressList.add(generalAddressone);
         user.setAddressList(addressList);
 
         role = new Role();
