@@ -99,6 +99,11 @@ public class UserServiceTest {
         user.setFirstName("Dipak");
         user.setLastName("Patel");
         user.setActive(true);
+
+        List<User> userList = new ArrayList<>();
+        userList.add(user);
+
+        organization.setUserList(userList);
         List<GeneralAddress> addressList = new ArrayList<>();
         GeneralAddress generalAddress1 = new GeneralAddress();
         generalAddress1.setAddress("Add line1");
@@ -131,8 +136,8 @@ public class UserServiceTest {
         when(entityConverter.userSignupDtoToUser(userSignupDto)).thenReturn(user);
         when(roleRepository.findByRoleCode(userSignupDto.getRoleCode())).thenReturn(role);
         when(recordCreationUtility.putNewRecordInformation()).thenReturn(new CreateRecordInformation(true, 1, LocalDateTime.now(), "fdfsdf", "errer"));
-        when(userRolesRepository.save(userRoles)).thenReturn(userRoles);
-        when(organizationRepository.save(organization)).thenReturn(organization);
+        when(userRolesRepository.save(any())).thenReturn(userRoles);
+        when(organizationRepository.save(any())).thenReturn(organization);
 
         UserSignupDto savedUserSignupDto = userService.addUser(userSignupDto, "General User");
         assertThat(savedUserSignupDto).isNotNull();
