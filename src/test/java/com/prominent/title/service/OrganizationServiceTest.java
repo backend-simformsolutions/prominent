@@ -203,7 +203,7 @@ class OrganizationServiceTest {
         when(organizationRepository.findByOrganizationNameLikeIgnoreCase(any())).thenReturn(organizationSearchDtos);
 
         List<OrganizationSearchDto> fetchedOrganizationList = organizationService.searchOrganization(organizationDto.getOrganizationName());
-        System.out.println("size:" + fetchedOrganizationList.size());
+
         assertThat(fetchedOrganizationList).isNotEmpty();
     }
 

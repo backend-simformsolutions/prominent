@@ -1,10 +1,13 @@
 package com.prominent.title.service;
 
 import com.prominent.title.dto.CityDto;
+import com.prominent.title.dto.util.CreateRecordInformation;
 import com.prominent.title.entity.resource.City;
+import com.prominent.title.exception.CityAlreadyExistsException;
 import com.prominent.title.repository.CityRepository;
 import com.prominent.title.service.city.CityService;
 import com.prominent.title.utility.RecordCreationUtility;
+import net.bytebuddy.utility.RandomString;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -12,10 +15,13 @@ import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -29,21 +35,37 @@ class CityServiceTest {
     @InjectMocks
     private CityService cityService;
 
-    @InjectMocks
+    @Mock
     private RecordCreationUtility recordCreationUtility;
 
     private City city;
+    private CityDto cityDto;
 
     @BeforeEach
     public void setup() {
+        cityDto = new CityDto("Prantij");
         city = new City("Himmatnagar");
     }
 
     @Test
     void add_city_county_test() {
-        when(cityRepository.save(city)).thenReturn(city);
-        City savedCity = cityRepository.save(city);
-        assertThat(savedCity).isNotNull();
+        when(cityRepository.save(any())).thenReturn(city);
+        when(recordCreationUtility.putNewRecordInformation()).thenReturn(new CreateRecordInformation(true, -1, LocalDateTime.now(), RandomString.make(30), RandomString.make(10)));
+
+        CityDto savedCityDto = cityService.addCityCounty(cityDto);
+
+        assertThat(savedCityDto).isNotNull();
+    }
+
+    @Test
+    void add_city_county_already_exists_test() {
+
+        when(cityRepository.existsByNameIgnoreCase(any())).thenReturn(true);
+
+        Exception exception = assertThrows(CityAlreadyExistsException.class, () -> {
+            cityService.addCityCounty(cityDto);
+        });
+        assertTrue(exception.getMessage().contains(cityDto.getName()));
     }
 
     @Test

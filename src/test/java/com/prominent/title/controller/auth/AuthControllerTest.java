@@ -7,11 +7,12 @@ import com.prominent.title.dto.response.GenericResponse;
 import com.prominent.title.dto.user.UserLoginDto;
 import com.prominent.title.entity.user.User;
 import com.prominent.title.service.auth.AuthService;
-import com.prominent.title.service.user.UserService;
 import com.prominent.title.utility.Constant;
 import com.prominent.title.utility.JwtUtil;
+import com.prominent.title.validation.ResetPasswordValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -36,8 +37,9 @@ class AuthControllerTest {
     MockMvc mockMvc;
     @Autowired
     ObjectMapper objectMapper;
-    @MockBean
-    UserService userService;
+
+    @Mock
+    ResetPasswordValidator resetPasswordValidator;
 
     @Autowired
     JwtUtil jwtUtil;
@@ -45,11 +47,20 @@ class AuthControllerTest {
     @MockBean
     AuthService authService;
 
-    String jwtToken;
+    private String jwtToken;
+    private User user;
 
     @BeforeEach
     public void setup() {
         jwtToken = jwtUtil.generateToken("dipak@test.com", Constant.JWT_TOKEN_EXPIRATION_DURATION);
+
+        user = new User();
+        user.setUserName("Dipak");
+        user.setUserPassword("Test@123456");
+        user.setContactNumber("914455098988");
+        user.setFirstName("Dipak");
+        user.setLastName("Patel");
+        user.setActive(true);
     }
 
     @Test
