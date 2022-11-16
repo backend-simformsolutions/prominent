@@ -9,6 +9,8 @@ import com.prominent.title.entity.user.User;
 import com.prominent.title.service.auth.AuthService;
 import com.prominent.title.service.user.UserService;
 import com.prominent.title.utility.Constant;
+import com.prominent.title.utility.JwtUtil;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +39,25 @@ class AuthControllerTest {
     @MockBean
     UserService userService;
 
+    @Autowired
+    JwtUtil jwtUtil;
+
     @MockBean
     AuthService authService;
+
+    String jwtToken;
+
+    @BeforeEach
+    public void setup() {
+        jwtToken = jwtUtil.generateToken("dipak@test.com", Constant.JWT_TOKEN_EXPIRATION_DURATION);
+    }
 
     @Test
     void user_login_test_200_ok() throws Exception {
         UserLoginDto userLoginDto = new UserLoginDto("dipak@test.com", "Dipak1111");
         List<String> roles = new ArrayList<>();
         roles.add("Admin");
-        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), Constant.TOKEN, roles);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), null, roles);
 
         when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(true, "User Logged in Successfully", loginResponseDto, HttpStatus.OK.value()));
 
@@ -61,7 +73,7 @@ class AuthControllerTest {
         UserLoginDto userLoginDto = new UserLoginDto("dipak@test.com", "Dipak1111");
         List<String> roles = new ArrayList<>();
         roles.add("Admin");
-        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), Constant.TOKEN, roles);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), jwtToken, roles);
 
         when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(false, "Invalid Username or password", loginResponseDto, HttpStatus.UNAUTHORIZED.value()));
 
