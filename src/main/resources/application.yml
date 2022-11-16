@@ -12,8 +12,8 @@ spring:
     show-sql: true
   datasource:
     url: jdbc:postgresql://localhost:5432/prominent
-    username: admin
-    password: admin
+    username: postgres
+    password: dipak009
   mail:
     host: smtp.gmail.com
     username: prominenttestuser490@gmail.com
