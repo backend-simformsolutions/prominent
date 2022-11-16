@@ -94,12 +94,12 @@ class OrganizationServiceTest {
         organization.setUserList(userList);
 
         addressList = new ArrayList<>();
-        generalAddress1 = new GeneralAddress();
-        generalAddress1.setAddress("Add line1");
-        generalAddress1.setAddressId(1);
-        generalAddress1.setState("Guj");
-        generalAddress1.setDefault(true);
-        addressList.add(generalAddress1);
+        generalAddress = new GeneralAddress();
+        generalAddress.setAddress("Add line1");
+        generalAddress.setAddressId(1);
+        generalAddress.setState("Guj");
+        generalAddress.setDefault(true);
+        addressList.add(generalAddress);
 
         organizationSearchDtos = new ArrayList<>();
         organizationSearchDtos.add(new OrganizationSearchDto(1, "Thurston Wyatt real Estate LLC.", "Dhaval"));
