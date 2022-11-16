@@ -54,7 +54,7 @@ class SignupControllerTest {
     }
 
     @Test
-    void user_sign_up_test_404_role_not_found() throws Exception {
+    void user_sign_up_test_404_not_found() throws Exception {
         UserSignupDto userSignupDto = new UserSignupDto("dipak@gmail.com", "9963725849", "User", "Test@1231111", "Test@1231111");
         when(userService.addUser(any(), any())).thenThrow(RoleNotFoundException.class);
 

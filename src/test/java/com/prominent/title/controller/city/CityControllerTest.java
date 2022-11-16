@@ -47,7 +47,7 @@ class CityControllerTest {
     }
 
     @Test
-    void add_city_test_400_not_found() throws Exception {
+    void add_city_test_404_not_found() throws Exception {
         CityDto cityDto = new CityDto("Prantij");
         when(cityService.addCityCounty(any())).thenThrow(CityAlreadyExistsException.class);
 
@@ -55,7 +55,7 @@ class CityControllerTest {
                         .post("/city/add")
                         .content(objectMapper.writeValueAsString(cityDto))
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotFound());
+                .andExpect(status().isBadRequest());
 
     }
 
