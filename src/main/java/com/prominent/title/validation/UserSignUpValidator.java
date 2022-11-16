@@ -44,12 +44,11 @@ public class UserSignUpValidator implements ConstraintValidator<SignupConstraint
         String userName = userSignupDto.getUserName();
         String userPassword = userSignupDto.getUserPassword();
 
-        isValid = !userName.equals("") && userPassword.matches(PASSWORD_REGEX);
+        isValid = !userName.isEmpty() && userPassword.matches(PASSWORD_REGEX);
         if (!isValid && userPassword.toLowerCase().contains(userName.toLowerCase())) {
             throw new PasswordContainsUsernameException(PASSWORD_USERNAME_MESSAGE);
         }
-        if(!isValid)
-        {
+        if (!isValid) {
             throw new PasswordContainsUsernameException("Password Should Contain At Least 1 Capital letter, 1 Symbol and 1 Digit");
         }
         return isValid;

@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 import static com.prominent.title.constants.Constant.*;
+
 @Slf4j
 @RestController
 @RequestMapping("/city")

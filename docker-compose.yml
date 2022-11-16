@@ -1,14 +1,31 @@
-version: '2'
-
+version: '3'
 services:
-  db:
-    restart: always
-    image: postgres:10
-    environment:
-      - POSTGRES_USER=admin
-      - POSTGRES_PASSWORD=admin
-      - POSTGRES_DB=prominent
+  prominent-api-docker:
+    image: prominent:1
+    container_name: prominent_api
+    build: .
     ports:
-      - 5432:5432
-    volumes:
-      - ./data:/var/lib/postgresql/data
+      - "8081:8080"
+    hostname: localhost
+    restart: always
+    depends_on:
+      - mypostgres1
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mypostgres1:5432/public
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=root@123
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8081" ]
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+  mypostgres1:
+    image: postgres
+    restart: always
+    ports:
+      - "5433:5433"
+    environment:
+      - POSTGRES_PASSWORD=root@123
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=public

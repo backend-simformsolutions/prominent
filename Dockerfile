@@ -5,6 +5,6 @@
 
 
 FROM openjdk:17
-ADD target/prominentdemo.jar prominentdemo.jar
+ADD target/prominent.jar prominent.jar
 EXPOSE 8080
-ENTRYPOINT ["java","-jar","/prominentdemo.jar"]
+ENTRYPOINT ["java","-jar","/prominent.jar"]
