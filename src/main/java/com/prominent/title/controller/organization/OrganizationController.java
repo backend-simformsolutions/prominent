@@ -4,9 +4,10 @@ import com.prominent.title.dto.organization.OrganizationDto;
 import com.prominent.title.dto.organization.OrganizationDtoWithBrokers;
 import com.prominent.title.dto.organization.OrganizationEntryDto;
 import com.prominent.title.dto.organization.OrganizationSearchDto;
-import com.prominent.title.dto.response.*;
-import com.prominent.title.entity.user.Organization;
-import com.prominent.title.exception.OrganizationNotFoundException;
+import com.prominent.title.dto.response.GenericFilterDto;
+import com.prominent.title.dto.response.GenericListResponse;
+import com.prominent.title.dto.response.GenericPageableDto;
+import com.prominent.title.dto.response.GenericResponse;
 import com.prominent.title.repository.OrganizationRepository;
 import com.prominent.title.service.organization.OrganizationService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.Optional;
 
 import static com.prominent.title.constants.Constant.*;
 
@@ -156,14 +156,8 @@ public class OrganizationController {
     })
     @DeleteMapping("/delete")
     public ResponseEntity<GenericResponse> deleteOrganization(@RequestParam int organizationId) {
-        Optional<Organization> optionalOrganization = organizationRepository.findById(organizationId);
-        if (optionalOrganization.isPresent()) {
-            organizationRepository.delete(optionalOrganization.get());
-            GenericResponse genericResponse = new GenericResponse(true, "Organization deleted Successfully", new EmptyJsonBody(), HttpStatus.OK.value());
-            return new ResponseEntity<>(genericResponse, HttpStatus.OK);
-        } else {
-            throw new OrganizationNotFoundException(organizationId + "");
-        }
+        GenericResponse genericResponse = new GenericResponse(true, "Organization Deleted Successfully", organizationService.deleteOrganization(organizationId), HttpStatus.OK.value());
+        return new ResponseEntity<>(genericResponse, HttpStatus.OK);
     }
 
     /**

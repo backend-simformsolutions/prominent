@@ -53,7 +53,6 @@ public class OrganizationService {
      * This method find all the organization with pageable.
      *
      * @param genericPageableDto genericPageableDto
-     * @param genericFilterDto   genericFilterDto
      * @return {@link GenericListResponse}
      * @see GenericListResponse
      */
@@ -175,6 +174,16 @@ public class OrganizationService {
             return organizationEntryDto;
         } else {
             throw new OrganizationNotFoundException(organizationEntryDto.getOrganizationDto().getOrganizationName());
+        }
+    }
+
+    public Boolean deleteOrganization(int organizationId) {
+        Optional<Organization> optionalOrganization = organizationRepository.findById(organizationId);
+        if (optionalOrganization.isPresent()) {
+            organizationRepository.delete(optionalOrganization.get());
+            return true;
+        } else {
+            throw new OrganizationNotFoundException(organizationId + "");
         }
     }
 
