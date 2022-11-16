@@ -11,9 +11,6 @@ spring:
       show-sql: true
     show-sql: true
   datasource:
-    #            url: jdbc:postgresql://localhost:5432/public
-    #            username: postgres
-    #            password: dipak009
     url: jdbc:postgresql://localhost:5432/prominent
     username: admin
     password: admin
