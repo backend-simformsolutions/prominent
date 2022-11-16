@@ -11,7 +11,7 @@ services:
     depends_on:
       - mypostgres1
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5432/prominent
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://mypostgres1:5432/prominent
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=root@123
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
