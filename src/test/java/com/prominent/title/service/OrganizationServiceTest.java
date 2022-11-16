@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class OrganizationServiceTest {
+class OrganizationServiceTest {
 
     @Mock
     private OrganizationRepository organizationRepository;
@@ -190,7 +190,7 @@ public class OrganizationServiceTest {
         when(organizationRepository.findById(anyInt())).thenReturn(Optional.ofNullable(null));
 
         Exception exception = assertThrows(OrganizationNotFoundException.class, () -> {
-            organizationService.deleteOrganization(organizationDto.getOrganizationId());
+            organizationService.deleteOrganization(1);
         });
 
         assertTrue(exception.getMessage().contains(String.valueOf(organizationDto.getOrganizationId())));
@@ -203,7 +203,7 @@ public class OrganizationServiceTest {
 
         List<OrganizationSearchDto> fetchedOrganizationList = organizationService.searchOrganization(organizationDto.getOrganizationName());
         System.out.println("size:" + fetchedOrganizationList.size());
-        assertTrue(fetchedOrganizationList.size() == 1);
+        assertThat(fetchedOrganizationList).isNotEmpty();
     }
 
 }

@@ -33,7 +33,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class UserServiceTest {
+class UserServiceTest {
 
     @Mock
     private UserRepository userRepository;
@@ -151,7 +151,7 @@ public class UserServiceTest {
         when(entityConverter.updateUserDetailsDtoToUser(any(), any())).thenReturn(user);
 
         UserDetailsDto savedUserDetailsDto = userService.editUserDetails(userDetailsDto);
-        assertThat(savedUserDetailsDto.getFirstName().equals("Dhaval"));
+        assertThat(savedUserDetailsDto).isNotNull();
     }
 
     @Test

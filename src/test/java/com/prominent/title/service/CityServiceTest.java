@@ -54,6 +54,6 @@ class CityServiceTest {
         when(cityRepository.findByNameLikeIgnoreCaseOrderByNameAsc(any())).thenReturn(cityList);
 
         List<CityDto> fetchedCity = cityService.searchCityCounty("Prantij");
-        assertThat(fetchedCity.size()).isPositive();
+        assertThat(fetchedCity).isNotEmpty();
     }
 }
