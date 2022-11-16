@@ -2,9 +2,9 @@ package com.prominent.title.controller.city;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.prominent.title.dto.CityDto;
+import com.prominent.title.exception.CityAlreadyExistsException;
 import com.prominent.title.service.city.CityService;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
@@ -32,9 +34,9 @@ class CityControllerTest {
     CityService cityService;
 
     @Test
-    void addCityTest() throws Exception {
-        CityDto cityDto = new CityDto("Test");
-        Mockito.when(cityService.addCityCounty(Mockito.any())).thenReturn(cityDto);
+    void add_city_test_200_ok() throws Exception {
+        CityDto cityDto = new CityDto("Prantij");
+        when(cityService.addCityCounty(any())).thenReturn(cityDto);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/city/add")
@@ -45,11 +47,24 @@ class CityControllerTest {
     }
 
     @Test
-    void findAllCountyTest() throws Exception {
+    void add_city_test_400_not_found() throws Exception {
+        CityDto cityDto = new CityDto("Prantij");
+        when(cityService.addCityCounty(any())).thenThrow(CityAlreadyExistsException.class);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                        .post("/city/add")
+                        .content(objectMapper.writeValueAsString(cityDto))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+
+    }
+
+    @Test
+    void find_all_county_test_200_ok() throws Exception {
         List<CityDto> cityDtoList = new ArrayList<>();
-        cityDtoList.add(new CityDto("City1"));
-        cityDtoList.add(new CityDto("City2"));
-        Mockito.when(cityService.searchCityCounty(Mockito.any())).thenReturn(cityDtoList);
+        cityDtoList.add(new CityDto("Prantij"));
+        cityDtoList.add(new CityDto("Himmatnagar"));
+        when(cityService.searchCityCounty(any())).thenReturn(cityDtoList);
 
         mockMvc.perform(MockMvcRequestBuilders
                         .get("/city/list")
@@ -58,9 +73,9 @@ class CityControllerTest {
     }
 
     @Test
-    void addCountiesTest() throws Exception {
+    void add_counties_test_200_ok() throws Exception {
 
-        List<String> cityList = Arrays.asList("City1", "City2");
+        List<String> cityList = Arrays.asList("Prantij", "Himmatnagar");
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/city/add-multiple")
                         .content(objectMapper.writeValueAsString(cityList))

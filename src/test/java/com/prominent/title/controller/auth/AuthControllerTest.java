@@ -8,6 +8,7 @@ import com.prominent.title.dto.user.UserLoginDto;
 import com.prominent.title.entity.user.User;
 import com.prominent.title.service.auth.AuthService;
 import com.prominent.title.service.user.UserService;
+import com.prominent.title.utility.Constant;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +24,12 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @AutoConfigureMockMvc(addFilters = false)
 @SpringBootTest
 class AuthControllerTest {
-
-    private final String TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJjajEyIiwiZXhwIjoxNjYwNjQyMDQ3LCJpYXQiOjE2NjAwMzcyNDd9.-Sp7y9LQdnn5baqeL2U1FBH--Bl32IsbP_bmda8qsr0";
     @Autowired
     MockMvc mockMvc;
     @Autowired
@@ -41,13 +41,13 @@ class AuthControllerTest {
     AuthService authService;
 
     @Test
-    void userLoginTest200Ok() throws Exception {
+    void user_login_test_200_ok() throws Exception {
         UserLoginDto userLoginDto = new UserLoginDto("dipak@test.com", "Dipak1111");
         List<String> roles = new ArrayList<>();
         roles.add("Admin");
-        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), TOKEN, roles);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), Constant.TOKEN, roles);
 
-        Mockito.when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(true, "User Logged in Successfully", loginResponseDto, HttpStatus.OK.value()));
+        when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(true, "User Logged in Successfully", loginResponseDto, HttpStatus.OK.value()));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/login")
@@ -57,13 +57,13 @@ class AuthControllerTest {
     }
 
     @Test
-    void userLoginTest401BadRequest() throws Exception {
+    void user_login_test_401_bad_request() throws Exception {
         UserLoginDto userLoginDto = new UserLoginDto("dipak@test.com", "Dipak1111");
         List<String> roles = new ArrayList<>();
         roles.add("Admin");
-        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), TOKEN, roles);
+        LoginResponseDto loginResponseDto = new LoginResponseDto(new User(), Constant.TOKEN, roles);
 
-        Mockito.when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(false, "Invalid Username or password", loginResponseDto, HttpStatus.UNAUTHORIZED.value()));
+        when(authService.verifyCredentials(userLoginDto)).thenReturn(new GenericResponse(false, "Invalid Username or password", loginResponseDto, HttpStatus.UNAUTHORIZED.value()));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/login")
@@ -73,10 +73,10 @@ class AuthControllerTest {
     }
 
     @Test
-    void forgotPasswordTest200Ok() throws Exception {
+    void forgot_password_test_200_Ok() throws Exception {
         EmailDto emailDto = new EmailDto("dipak@test.com");
 
-        Mockito.when(authService.createPasswordResetTokenForUser(emailDto.getUserName())).thenReturn(new GenericResponse(true, "We have sent a reset password link to your email. Please check.", emailDto.getUserName(), HttpStatus.OK.value()));
+        when(authService.createPasswordResetTokenForUser(emailDto.getUserName())).thenReturn(new GenericResponse(true, "We have sent a reset password link to your email. Please check.", emailDto.getUserName(), HttpStatus.OK.value()));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/forgot-password")
@@ -86,10 +86,10 @@ class AuthControllerTest {
     }
 
     @Test
-    void forgotPasswordTest404NotFound() throws Exception {
+    void forgot_password_test_404_not_found() throws Exception {
         EmailDto emailDto = new EmailDto("dipak@test.com");
 
-        Mockito.when(authService.createPasswordResetTokenForUser(emailDto.getUserName())).thenReturn(new GenericResponse(false, "Cannot Find User", emailDto.getUserName(), HttpStatus.NOT_FOUND.value()));
+        when(authService.createPasswordResetTokenForUser(emailDto.getUserName())).thenReturn(new GenericResponse(false, "Cannot Find User", emailDto.getUserName(), HttpStatus.NOT_FOUND.value()));
 
         mockMvc.perform(MockMvcRequestBuilders
                         .post("/auth/forgot-password")
@@ -99,7 +99,7 @@ class AuthControllerTest {
     }
 
     @Test
-    void logoutTest() throws Exception {
+    void logout_test() throws Exception {
         Mockito.doNothing().when(authService).logout(new MockHttpServletRequest());
 
         mockMvc.perform(MockMvcRequestBuilders
